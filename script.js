@@ -150,15 +150,28 @@ function switchMenuTab(e) {
 }
 
 //
-// Theme Toggle
-const savedTheme = localStorage.getItem("theme");
+// Theme Toggle & Background Update Logic
+function updateThemeImages(isLight) {
+  const heroImg = document.querySelector("#heroBg img");
+  const resImg = document.querySelector("#reservationBg img");
+  const lightImg = "./images/hero-restaurant-daytime.png";
+  const darkImg = "./images/hero-restaurant.jpg";
+  
+  if (heroImg) heroImg.src = isLight ? lightImg : darkImg;
+  if (resImg) resImg.src = isLight ? lightImg : darkImg;
+}
 
-if (savedTheme === "light") {
+const savedTheme = localStorage.getItem("theme");
+const isLightOnLoad = savedTheme === "light";
+
+if (isLightOnLoad) {
   document.body.classList.add("light-theme");
   themeToggle.textContent = "☀️";
 } else {
   themeToggle.textContent = "🌙";
 }
+// Set correct images on initial load
+updateThemeImages(isLightOnLoad);
 
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light-theme");
@@ -172,6 +185,9 @@ themeToggle.addEventListener("click", () => {
     localStorage.setItem("theme", "dark");
     themeToggle.textContent = "🌙";
   }
+  
+  // Swap daytime/nighttime images dynamically
+  updateThemeImages(isLight);
 });
 
 // ── Menu Search and Filter ─────────────────────────
