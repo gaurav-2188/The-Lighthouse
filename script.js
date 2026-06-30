@@ -206,7 +206,7 @@ function triggerFilter() {
   const timeFilter = activeBtn ? activeBtn.dataset.filter : "all";
   const cuisineFilter = cuisineDropdown ? cuisineDropdown.value : "all";
   const searchText = menuSearch ? menuSearch.value : "";
-  
+
   filterMenuItems(timeFilter, cuisineFilter, searchText);
 }
 
@@ -450,9 +450,8 @@ function updateAverageRating() {
 
   const average = (totalRating / allReviews.length).toFixed(1);
 
-  averageRating.textContent = `⭐ ${average}/5 from ${allReviews.length} review${
-    allReviews.length > 1 ? "s" : ""
-  }`;
+  averageRating.textContent = `⭐ ${average}/5 from ${allReviews.length} review${allReviews.length > 1 ? "s" : ""
+    }`;
 }
 function renderReviews() {
   const grid = document.getElementById('reviews-grid');
@@ -482,7 +481,7 @@ function renderReviews() {
       </div>`
     )
     .join('');
-    updateAverageRating();
+  updateAverageRating();
 }
 
 // Star rating widget
@@ -674,7 +673,7 @@ function displayChefsRecommendation() {
 // Translate UI Content
 function updateContent() {
   if (typeof i18next === 'undefined' || !i18next.t) return;
-  
+
   // Translate standard data-i18n elements
   document.querySelectorAll("[data-i18n]").forEach((elem) => {
     const key = elem.getAttribute("data-i18n");
@@ -708,12 +707,46 @@ function updateContent() {
   renderReviews();
 }
 
+// ── Dish Availability Management ───
+const dishAvailability = {
+  "chicken_keema_dosa": false,
+  "paneer_butter_masala": true,
+  "masala_dosa": true,
+  "idli_sambar": true,
+  "hyderabadi_chicken_biryani": true,
+  "butter_chicken": true,
+  "mango_lassi": true,
+  "masala_chai": true,
+  "fresh_lime_soda": true,
+  "gulab_jamun": true,
+  "rasmalai": true,
+  "kesar_pista_kulfi": false
+};
+
+function initDishAvailability() {
+  const menuItems = document.querySelectorAll('.menu-item');
+  menuItems.forEach((item) => {
+    const nameEl = item.querySelector('[data-i18n*="menu.items."]');
+    if (nameEl) {
+      const i18nKey = nameEl.getAttribute('data-i18n');
+      const match = i18nKey.match(/menu\.items\.([a-z0-9_]+)\./i);
+      if (match && match[1]) {
+        const dishId = match[1];
+        if (dishAvailability[dishId] === false) {
+          item.classList.add('unavailable');
+        }
+      }
+    }
+  });
+}
+
 // ── Initialise ───
 document.addEventListener('DOMContentLoaded', function () {
   handleScroll();
   setupIntersectionObserver();
   updateAvailableTimes();
   handleCardFlip();
+  initDishAvailability();
 
   // Initialize i18next
   if (typeof i18next !== 'undefined') {
@@ -815,7 +848,7 @@ function attachSkeletonToCard(card) {
   imgs.forEach((img) => {
     img.classList.add('image-hidden');
     // lazy-load optimization: set loading attribute where supported
-    try { if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy'); } catch (e) {}
+    try { if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy'); } catch (e) { }
 
     if (img.complete && img.naturalWidth > 0) {
       // Already loaded from cache - reveal immediately
@@ -876,7 +909,7 @@ function attachSkeletonToSimpleImage(container, minHeight = 180) {
     img.classList.remove('image-hidden');
     sk.remove();
   } else {
-    try { if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy'); } catch (e) {}
+    try { if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy'); } catch (e) { }
 
     img.addEventListener('load', function onLoad() {
       img.classList.add('image-loaded');
@@ -1007,7 +1040,7 @@ function loadHtml2Pdf() {
       resolve();
       return;
     }
-    
+
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
     script.onload = resolve;
@@ -1047,7 +1080,7 @@ async function generateMenuPDF() {
 
     // Get menu items
     const menuItems = document.querySelectorAll('.menu-item:not(.hidden-item)');
-    
+
     if (menuItems.length === 0) {
       alert('No menu items available to download.');
       hideLoadingOverlay();
@@ -1105,14 +1138,14 @@ async function generateMenuPDF() {
       const category = item.dataset.category;
       if (categories[category]) {
         const name = item.querySelector('h3')?.textContent || 'Unknown';
-        const price = item.querySelector('.polaroid-price')?.textContent || 
-                      item.querySelector('.menu-price')?.textContent || 
-                      'Price on Request';
+        const price = item.querySelector('.polaroid-price')?.textContent ||
+          item.querySelector('.menu-price')?.textContent ||
+          'Price on Request';
         const diet = item.dataset.diet || 'veg';
-        const description = item.querySelector('.back-content p')?.textContent || 
-                           item.querySelector('.food-content p')?.textContent || 
-                           '';
-        
+        const description = item.querySelector('.back-content p')?.textContent ||
+          item.querySelector('.food-content p')?.textContent ||
+          '';
+
         categories[category].items.push({ name, price, diet, description });
       }
     });
@@ -1232,12 +1265,12 @@ async function generateMenuPDF() {
       <p>Thank you for dining with us at The Lighthouse</p>
       <p style="margin-top: 5px;">We look forward to serving you!</p>
       <p style="margin-top: 10px; font-size: 11px;">
-        Menu generated on ${new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
+        Menu generated on ${new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })}
       </p>
     `;
     pdfContent.appendChild(footer);
@@ -1247,17 +1280,17 @@ async function generateMenuPDF() {
       margin: [15, 15, 15, 15],
       filename: `The_Lighthouse_Menu_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
+      html2canvas: {
         scale: 2,
         useCORS: true,
         letterRendering: true,
         scrollY: 0,
         windowHeight: pdfContent.scrollHeight
       },
-      jsPDF: { 
-        unit: 'mm', 
-        format: 'a4', 
-        orientation: 'portrait' 
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
       },
       pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
@@ -1319,7 +1352,7 @@ document.body.appendChild(floatingDownloadBtn);
 window.addEventListener('scroll', () => {
   const menuSection = document.getElementById('menu');
   if (!menuSection) return;
-  
+
   const rect = menuSection.getBoundingClientRect();
   if (rect.top < window.innerHeight && rect.bottom > 0) {
     floatingDownloadBtn.style.display = 'block';

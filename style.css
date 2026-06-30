@@ -2480,3 +2480,71 @@ body.light-theme #downloadMenuPDF:hover {
   font-size: 1.2rem;
   letter-spacing: 2px;
 }
+
+/* =============================================
+   UNAVAILABLE DISHES STYLING
+   ============================================= */
+.menu-item.unavailable {
+  pointer-events: none; /* Disable all interactions including flips or hover lifts */
+}
+
+/* Apply grayscale and reduced opacity to all images in unavailable cards */
+.menu-item.unavailable img,
+.menu-item.unavailable .food-image {
+  filter: grayscale(100%) contrast(0.85) !important;
+  opacity: 0.4 !important;
+}
+
+/* Sold Out Overlay Badge for Polaroid style images */
+.menu-item.unavailable .polaroid-image-wrapper::after {
+  content: "SOLD OUT";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  background: rgba(220, 53, 69, 0.95);
+  color: #fff;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Sold Out Ribbon/Badge for non-3D cards */
+.menu-item.unavailable .food-card::after {
+  content: "SOLD OUT";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #dc3545;
+  color: white;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.menu-item.unavailable .food-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none !important;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.menu-item.unavailable .food-card::before {
+  display: none !important;
+}
+
+/* Light theme adjustments for unavailable dishes */
+body.light-theme .menu-item.unavailable .food-card {
+  background-color: rgba(0, 0, 0, 0.05);
+}
