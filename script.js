@@ -709,13 +709,13 @@ function updateContent() {
 
 // ── Dish Availability Management ───
 const dishAvailability = {
-  "chicken_keema_dosa": false,
+  "chicken_keema_dosa": true,
   "paneer_butter_masala": true,
   "masala_dosa": true,
   "idli_sambar": true,
   "hyderabadi_chicken_biryani": true,
   "butter_chicken": true,
-  "mango_lassi": true,
+  "mango_lassi": false,
   "masala_chai": true,
   "fresh_lime_soda": true,
   "gulab_jamun": true,
@@ -734,6 +734,17 @@ function initDishAvailability() {
         const dishId = match[1];
         if (dishAvailability[dishId] === false) {
           item.classList.add('unavailable');
+
+          // Create visual Sold Out badge
+          const badge = document.createElement('div');
+          badge.className = 'sold-out-badge';
+          badge.textContent = 'SOLD OUT';
+
+          // Append to image wrapper or card container
+          const targetContainer = item.querySelector('.polaroid-image-wrapper') || item.querySelector('.food-card');
+          if (targetContainer) {
+            targetContainer.appendChild(badge);
+          }
         }
       }
     }
